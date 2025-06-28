@@ -1,0 +1,73 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { allPlaylists, playlists, songs } from '@/lib/data';
+import PlayListItemCard from "@/components/playlistitemcard.astro"
+import Musicstable from '@/components/musicstable.astro';
+import { CardPlayButton } from '@/components/cardplaybutton';
+
+const {id}=Astro.params
+
+const playlist = allPlaylists.find(playlist=>playlist.id===id)
+
+const PlayListSongs= songs.filter(song=>song.albumId===playlist?.albumId)
+
+
+---
+
+<Layout title="spotify clone">
+    <div id="playlist-container" class="relative flex flex-col h-full  bg-zinc-900 overflow-auto scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200" transition:name=`playlist ${id} box`>
+
+<!--page header -->
+
+<header class="flex flex-row gap-8 px-6 mt-10">
+    
+    <picture class="aspect-square w-36 h-40 flex-none">
+        <img src={playlist?.cover} alt={`Cover of ${playlist?.title} `} class="object-cover w-full h-auto shadow-lg" transition:name=`playlist ${playlist?.id} image`/>
+    </picture>
+
+    <div class="flex flex-col justify-between mt-2 ">
+    <h2 class="flex flex-1 items-end">Play list</h2>
+        <div>
+            <h1 class="text-6xl font-bold block text-white">
+                {playlist?.title}
+                <span transition:name=`playlist ${playlist?.id} title`></span>
+            </h1>
+        </div>
+   
+    <div class="flex-1 flex items-end mt-4">
+        <div class="text-sm text-gray-300 font-normal mb-4">
+            <div transition:name=`playlist ${playlist?.id} artists `>
+                <span>{playlist?.artists.join(", ")}</span>
+            </div>
+            <p >
+                <span class="text-white">{PlayListSongs.length} canciones</span>, 3 h aproximadamente
+            </p>
+        </div>
+        </div>
+    </div>
+</header>
+<div class="pl-6 pt-6">
+<CardPlayButton  id={id} client:load size="large"/>
+</div>
+
+	<div class="relative z-10 px-6 pt-5">
+		<!--greeting -->
+		
+	</div>
+
+	<div class="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/80 -z-[1] ">
+
+	</div>
+    <section class="p-4">
+        <Musicstable songs={PlayListSongs}/>
+    </section>
+    
+    
+	</div>
+	</Layout>
+	
+
+
+
+
+
